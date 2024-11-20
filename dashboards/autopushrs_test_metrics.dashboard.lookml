@@ -342,6 +342,7 @@
     interpolation: linear
     x_axis_zoom: true
     y_axis_zoom: true
+    x_axis_label: Date
     series_colors:
       unit_job_time_90: "#7F165B"
       unit_run_time_90: "#c78bb8"
@@ -666,7 +667,7 @@
       integration_success: "#08B248"
       integration_failure: "#FC2E31"
       integration_skipped: "#808080"
-      integration_unknown: "#FC9200"
+      integration_unknown: "#FCBF00"
     series_labels:
       integration_success: Success
       integration_failure: Failure
