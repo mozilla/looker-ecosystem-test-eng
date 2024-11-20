@@ -11,6 +11,7 @@ view: autopushrs_coverage {
   dimension: job_number {
     type: number
     primary_key: yes
+    value_format: "0"
     sql: ${TABLE}.`Job Number` ;;
   }
 
@@ -33,17 +34,11 @@ view: autopushrs_coverage {
   # Dates and timestamps can be represented in Looker using a dimension group of type: time.
   # Looker converts dates and timestamps to the specified timeframes within the dimension group.
 
-  dimension_group: date {
-    type: time
-    timeframes: [raw, date, week, month, quarter, year]
-    convert_tz: no
-    datatype: date
-    sql: ${TABLE}.Date ;;
-  }
-
   dimension_group: timestamp {
     type: time
     timeframes: [raw, time, date, week, month, quarter, year]
+    convert_tz: yes
+    datatype: timestamp
     sql: ${TABLE}.Timestamp ;;
   }
 

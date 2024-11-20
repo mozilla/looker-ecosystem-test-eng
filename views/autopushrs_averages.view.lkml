@@ -83,62 +83,62 @@ view: autopushrs_averages {
   # Click on the type parameter to see all the options in the Quick Help panel on the right.
 
   measure: execution_time_30 {
-    type: sum
+    type: average
     sql: ${TABLE}.`Execution Time 30` ;;
   }
 
   measure: execution_time_60 {
-    type: sum
+    type: average
     sql: ${TABLE}.`Execution Time 60` ;;
   }
 
   measure: execution_time_90 {
-    type: sum
+    type: average
     sql: ${TABLE}.`Execution Time 90` ;;
   }
 
   measure: job_time_30 {
-    type: sum
+    type: average
     sql: ${TABLE}.`Job Time 30` ;;
   }
 
   measure: job_time_60 {
-    type: sum
+    type: average
     sql: ${TABLE}.`Job Time 60` ;;
   }
 
   measure: job_time_90 {
-    type: sum
+    type: average
     sql: ${TABLE}.`Job Time 90` ;;
   }
 
   measure: run_time_30 {
-    type: sum
+    type: average
     sql: ${TABLE}.`Run Time 30` ;;
   }
 
   measure: run_time_60 {
-    type: sum
+    type: average
     sql: ${TABLE}.`Run Time 60` ;;
   }
 
   measure: run_time_90 {
-    type: sum
+    type: average
     sql: ${TABLE}.`Run Time 90` ;;
   }
 
   measure: success_rate_30 {
-    type: sum
+    type: average
     sql: ${TABLE}.`Success Rate 30` ;;
   }
 
   measure: success_rate_60 {
-    type: sum
+    type: average
     sql: ${TABLE}.`Success Rate 60` ;;
   }
 
   measure: success_rate_90 {
-    type: sum
+    type: average
     sql: ${TABLE}.`Success Rate 90` ;;
   }
 
