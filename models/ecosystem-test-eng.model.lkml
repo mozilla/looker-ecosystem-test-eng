@@ -19,6 +19,10 @@ explore: autopushrs_averages {}
 
 explore: autopushrs_coverage {}
 
+explore: fxa_averages {}
+
+explore: fxa_results {}
+
 explore: merinopy_results {}
 
 explore: merinopy_averages {}
