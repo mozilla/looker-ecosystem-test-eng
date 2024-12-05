@@ -1,8 +1,8 @@
-# The name of this view in Looker is "Autopushrs Coverage"
-view: autopushrs_coverage {
+# The name of this view in Looker is "FxA Results"
+view: fxa_results {
   # The sql_table_name parameter indicates the underlying database table
   # to be used for all fields in this view.
-  sql_table_name: `test_metrics.autopushrs_coverage` ;;
+  sql_table_name: `test_metrics.fxa_results` ;;
 
   # Dimensions
   # A dimension is a groupable field that can be used to filter query results.
@@ -18,6 +18,11 @@ view: autopushrs_coverage {
   dimension: repository {
     type: string
     sql: ${TABLE}.Repository ;;
+  }
+
+  dimension: status {
+    type: string
+    sql: ${TABLE}.Status ;;
   }
 
   dimension: test_suite {
@@ -47,69 +52,79 @@ view: autopushrs_coverage {
   # measures for this dimension, but you can also add measures of many different aggregates.
   # Click on the type parameter to see all the options in the Quick Help panel on the right.
 
-  measure: branch_count {
-    type: sum
-    sql: ${TABLE}.`Branch Count` ;;
-  }
-
-  measure:branch_covered {
-    type: sum
-    sql: ${TABLE}.`Branch Covered` ;;
-  }
-
-  measure: branch_not_covered {
-    type: sum
-    sql: ${TABLE}.`Branch Not Covered` ;;
-  }
-
-  measure: branch_percent {
+  measure: execution_time {
     type: average
-    sql: ${TABLE}.`Branch Percent` ;;
+    sql: ${TABLE}.`Execution Time` ;;
   }
 
-  measure: function_count {
+  measure: failure {
     type: sum
-    sql: ${TABLE}.`Function Count` ;;
+    sql: ${TABLE}.Failure ;;
   }
 
-  measure: function_covered {
-    type: sum
-    sql: ${TABLE}.`Function Covered` ;;
-  }
-
-  measure: function_not_covered {
-    type: sum
-    sql: ${TABLE}.`Function Not Covered` ;;
-  }
-
-  measure: function_percent {
+  measure: failure_rate {
     type: average
-    sql: ${TABLE}.`Function Percent` ;;
+    sql: ${TABLE}.`Failure Rate` ;;
   }
 
-  measure: line_count {
+  measure: fixme {
     type: sum
-    sql: ${TABLE}.`Line Count` ;;
+    sql: ${TABLE}.Fixme ;;
   }
 
-  measure: line_covered {
-    type: sum
-    sql: ${TABLE}.`Line Covered` ;;
-  }
-
-  measure: line_excluded {
-    type: sum
-    sql: ${TABLE}.`Line Excluded` ;;
-  }
-
-  measure: line_not_covered {
-    type: sum
-    sql: ${TABLE}.`Line Not Covered` ;;
-  }
-
-  measure: line_percent {
+  measure: fixme_rate {
     type: average
-    sql: ${TABLE}.`Line Percent` ;;
+    sql: ${TABLE}.`Fixme Rate` ;;
+  }
+
+  measure: job_time {
+    type: average
+    sql: ${TABLE}.`Job Time` ;;
+  }
+
+  measure: retry_count {
+    type: sum
+    sql: ${TABLE}.`Retry Count` ;;
+  }
+
+  measure: run_time {
+    type: average
+    sql: ${TABLE}.`Run Time` ;;
+  }
+
+  measure: skipped {
+    type: sum
+    sql: ${TABLE}.Skipped ;;
+  }
+
+  measure: skipped_rate {
+    type: average
+    sql: ${TABLE}.`Skipped Rate` ;;
+  }
+
+  measure: success {
+    type: sum
+    sql: ${TABLE}.Success ;;
+  }
+
+  measure: success_rate {
+    type: average
+    sql: ${TABLE}.`Success Rate` ;;
+  }
+
+  measure: total {
+    type: sum
+    sql: ${TABLE}.Total ;;
+  }
+
+  measure: unknown {
+    type: sum
+    sql: ${TABLE}.Unknown ;;
+  }
+
+  measure: unknown_rate {
+    type: average
+    sql: ${TABLE}.`Unknown Rate` ;;
   }
 
   measure: count {
