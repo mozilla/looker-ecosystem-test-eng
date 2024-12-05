@@ -30,3 +30,5 @@ explore: merinopy_averages {}
 explore: merinopy_coverage {}
 
 explore: autopushrs_results {}
+
+explore: report_test_case_coverage {}
