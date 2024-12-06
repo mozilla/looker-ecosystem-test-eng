@@ -32,3 +32,9 @@ explore: merinopy_coverage {}
 explore: autopushrs_results {}
 
 explore: report_test_case_coverage {}
+
+explore: test_automation_coverage {}
+
+explore: test_automation_status {}
+
+explore: testrail_projects {}
