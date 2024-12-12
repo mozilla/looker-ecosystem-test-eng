@@ -4,9 +4,6 @@ connection: "ecosystem-test-eng"
 # include all the views
 include: "/views/**/*.view.lkml"
 
-# include all the dashboards
-include: "/dashboards/**/*.dashboard.lookml"
-
 # Datagroups define a caching policy for an Explore. To learn more,
 # use the Quick Help panel on the right to see documentation.
 
@@ -19,6 +16,28 @@ explore: autopushrs_averages {}
 
 explore: autopushrs_coverage {}
 
+explore: autopushrs_results {}
+
+explore: autopushrs {
+  view_name: autopushrs_results
+
+  join: autopushrs_coverage {
+    sql_on: ${autopushrs_results.repository} = ${autopushrs_coverage.repository}
+            AND ${autopushrs_results.workflow} = ${autopushrs_coverage.workflow}
+            AND ${autopushrs_results.test_suite} = ${autopushrs_coverage.test_suite}
+            AND ${autopushrs_results.job_number} = ${autopushrs_coverage.job_number} ;;
+    relationship: one_to_one
+  }
+
+  join: autopushrs_averages {
+    sql_on: ${autopushrs_results.repository} = ${autopushrs_averages.repository}
+            AND ${autopushrs_results.workflow} = ${autopushrs_averages.workflow}
+            AND ${autopushrs_results.test_suite} = ${autopushrs_averages.test_suite}
+            AND ${autopushrs_results.timestamp_date} = ${autopushrs_averages.end_date_30_date} ;;
+    relationship: many_to_one
+  }
+}
+
 explore: fxa_averages {}
 
 explore: fxa_results {}
@@ -28,8 +47,6 @@ explore: merinopy_results {}
 explore: merinopy_averages {}
 
 explore: merinopy_coverage {}
-
-explore: autopushrs_results {}
 
 explore: report_test_case_coverage {}
 
