@@ -4,8 +4,12 @@ view: autopushrs_averages {
   # to be used for all fields in this view.
   sql_table_name: `test_metrics.autopushrs_averages` ;;
 
-  # No primary key is defined for this view. In order to join this view in an Explore,
-  # define primary_key: yes on a dimension that has no repeated values.
+  # Primary key for this view.
+  dimension: unique_key {
+    type: string
+    primary_key: yes
+    sql: CONCAT(${repository}, '_', ${workflow}, '_', ${test_suite}, '_', CAST(${end_date_30_raw} AS STRING)) ;;
+  }
 
   # Dimensions
   # A dimension is a groupable field that can be used to filter query results.
