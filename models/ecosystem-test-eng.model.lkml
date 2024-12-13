@@ -18,28 +18,8 @@ explore: autopushrs_coverage {}
 
 explore: autopushrs_results {}
 
-explore: autopushrs {}
-
 explore: autopushrs_test_metrics {
-  view_name: autopushrs_averages
-
-  join: autopushrs_results {
-    sql_on: ${autopushrs_results.repository} = ${autopushrs_averages.repository}
-            AND ${autopushrs_results.workflow} = ${autopushrs_averages.workflow}
-            AND ${autopushrs_results.test_suite} = ${autopushrs_averages.test_suite}
-            AND ${autopushrs_results.timestamp_date} = ${autopushrs_averages.end_date_30_date} ;;
-    relationship: many_to_one
-    type: left_outer
-  }
-
-  join: autopushrs_coverage {
-    sql_on: ${autopushrs_results.repository} = ${autopushrs_coverage.repository}
-            AND ${autopushrs_results.workflow} = ${autopushrs_coverage.workflow}
-            AND ${autopushrs_results.test_suite} = ${autopushrs_coverage.test_suite}
-            AND ${autopushrs_results.job_number} = ${autopushrs_coverage.job_number} ;;
-    relationship: one_to_one
-    type: left_outer
-  }
+  view_name: autopushrs
 }
 
 explore: fxa_averages {}
