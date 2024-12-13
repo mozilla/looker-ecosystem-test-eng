@@ -47,6 +47,17 @@ view: autopushrs_results {
     sql: ${TABLE}.Timestamp ;;
   }
 
+  dimension: is_last_quarter_date {
+    type: yesno
+    sql: ${timestamp_raw} = (
+          SELECT MAX(Timestamp)
+          FROM `test_metrics.autopushrs_results`
+          WHERE
+            EXTRACT(YEAR FROM Timestamp) = EXTRACT(YEAR FROM ${timestamp_raw})
+            AND EXTRACT(QUARTER FROM Timestamp) = EXTRACT(QUARTER FROM ${timestamp_raw})
+        ) ;;
+  }
+
   # Measures
   # A measure is a field that uses a SQL aggregate function. Here are defined sum and average
   # measures for this dimension, but you can also add measures of many different aggregates.

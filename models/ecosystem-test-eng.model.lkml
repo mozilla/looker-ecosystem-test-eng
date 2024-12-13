@@ -18,7 +18,7 @@ explore: autopushrs_coverage {}
 
 explore: autopushrs_results {}
 
-explore: autopushrs {
+explore: autopushrs_test_metrics {
   view_name: autopushrs_averages
 
   join: autopushrs_results {
