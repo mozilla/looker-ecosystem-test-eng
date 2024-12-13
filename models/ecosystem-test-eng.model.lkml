@@ -27,6 +27,7 @@ explore: autopushrs_test_metrics {
             AND ${autopushrs_results.test_suite} = ${autopushrs_averages.test_suite}
             AND ${autopushrs_results.timestamp_date} = ${autopushrs_averages.end_date_30_date} ;;
     relationship: many_to_one
+    type: left_outer
   }
 
   join: autopushrs_coverage {
@@ -35,6 +36,7 @@ explore: autopushrs_test_metrics {
             AND ${autopushrs_results.test_suite} = ${autopushrs_coverage.test_suite}
             AND ${autopushrs_results.job_number} = ${autopushrs_coverage.job_number} ;;
     relationship: one_to_one
+    type: left_outer
   }
 }
 
