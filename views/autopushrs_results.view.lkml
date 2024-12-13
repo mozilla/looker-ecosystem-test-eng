@@ -1,3 +1,5 @@
+# THIS VIEW IS NOT CURRENTLY IN USE
+
 # The name of this view in Looker is "Autopushrs Results"
 view: autopushrs_results {
   # The sql_table_name parameter indicates the underlying database table

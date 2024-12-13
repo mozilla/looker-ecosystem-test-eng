@@ -12,12 +12,6 @@ include: "/views/**/*.view.lkml"
 # fields available to users for data analysis.
 # Explores should be purpose-built for specific use cases.
 
-explore: autopushrs_averages {}
-
-explore: autopushrs_coverage {}
-
-explore: autopushrs_results {}
-
 explore: autopushrs_test_metrics {
   view_name: autopushrs
 }
