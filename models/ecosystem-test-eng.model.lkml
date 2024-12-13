@@ -22,11 +22,11 @@ explore: autopushrs_test_metrics {
   view_name: autopushrs_averages
 
   join: autopushrs_results {
-    sql_on: ${autopushrs_averages.repository} = ${autopushrs_results.repository}
-            AND ${autopushrs_averages.workflow} = ${autopushrs_results.workflow}
-            AND ${autopushrs_averages.test_suite} = ${autopushrs_results.test_suite}
-            AND ${autopushrs_averages.end_date_30_date} = ${autopushrs_results.timestamp_date} ;;
-    relationship: one_to_many
+    sql_on: ${autopushrs_results.repository} = ${autopushrs_averages.repository}
+            AND ${autopushrs_results.workflow} = ${autopushrs_averages.workflow}
+            AND ${autopushrs_results.test_suite} = ${autopushrs_averages.test_suite}
+            AND ${autopushrs_results.timestamp_date} = ${autopushrs_averages.end_date_30_date} ;;
+    relationship: many_to_one
   }
 
   join: autopushrs_coverage {
