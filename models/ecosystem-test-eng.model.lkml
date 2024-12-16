@@ -30,6 +30,7 @@ explore: merinopy_automated_test_metrics {
   view_name: merinopy_averages
 
   join: merinopy_results {
+    type: left_outer
     relationship: many_to_one
     sql_on: ${merinopy_averages.repository} = ${merinopy_results.repository}
           AND ${merinopy_averages.workflow} = ${merinopy_results.workflow}
@@ -38,6 +39,7 @@ explore: merinopy_automated_test_metrics {
   }
 
   join: merinopy_coverage {
+    type: left_outer
     relationship: many_to_one
     sql_on: ${merinopy_averages.repository} = ${merinopy_coverage.repository}
           AND ${merinopy_averages.workflow} = ${merinopy_coverage.workflow}
