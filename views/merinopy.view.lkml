@@ -136,7 +136,7 @@ view: merinopy {
   dimension_group: date {
     type: time
     timeframes: [raw, date, week, month, quarter, year]
-    sql: ${TABLE}.end_date_30 ;;
+    sql: ${TABLE}.averages_date ;;
   }
 
   dimension_group: timestamp {
