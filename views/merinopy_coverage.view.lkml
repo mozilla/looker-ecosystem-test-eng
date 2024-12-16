@@ -67,26 +67,6 @@ view: merinopy_coverage {
     sql: ${TABLE}.`Branch Percent` ;;
   }
 
-  measure: function_count {
-    type: sum
-    sql: ${TABLE}.`Function Count` ;;
-  }
-
-  measure: function_covered {
-    type: sum
-    sql: ${TABLE}.`Function Covered` ;;
-  }
-
-  measure: function_not_covered {
-    type: sum
-    sql: ${TABLE}.`Function Not Covered` ;;
-  }
-
-  measure: function_percent {
-    type: average
-    sql: ${TABLE}.`Function Percent` ;;
-  }
-
   measure: line_count {
     type: sum
     sql: ${TABLE}.`Line Count` ;;
@@ -110,9 +90,5 @@ view: merinopy_coverage {
   measure: line_percent {
     type: average
     sql: ${TABLE}.`Line Percent` ;;
-  }
-
-  measure: count {
-    type: count
   }
 }

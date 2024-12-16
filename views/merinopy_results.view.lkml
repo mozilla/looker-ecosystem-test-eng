@@ -137,8 +137,4 @@ view: merinopy_results {
     type: average
     sql: ${TABLE}.`Unknown Rate` ;;
   }
-
-  measure: count {
-    type: count
-  }
 }

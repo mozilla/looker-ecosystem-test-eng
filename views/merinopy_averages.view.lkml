@@ -29,52 +29,12 @@ view: merinopy_averages {
   # Dates and timestamps can be represented in Looker using a dimension group of type: time.
   # Looker converts dates and timestamps to the specified timeframes within the dimension group.
 
-  dimension_group: end_date_30 {
-    type: time
-    timeframes: [raw, date, week, month, quarter, year]
-    convert_tz: no
-    datatype: date
-    sql: ${TABLE}.`End Date 30` ;;
-  }
-
-  dimension_group: end_date_60 {
-    type: time
-    timeframes: [raw, date, week, month, quarter, year]
-    convert_tz: no
-    datatype: date
-    sql: ${TABLE}.`End Date 60` ;;
-  }
-
-  dimension_group: end_date_90 {
+  dimension_group: date {
     type: time
     timeframes: [raw, date, week, month, quarter, year]
     convert_tz: no
     datatype: date
     sql: ${TABLE}.`End Date 90` ;;
-  }
-
-  dimension_group: start_date_30 {
-    type: time
-    timeframes: [raw, date, week, month, quarter, year]
-    convert_tz: no
-    datatype: date
-    sql: ${TABLE}.`Start Date 30` ;;
-  }
-
-  dimension_group: start_date_60 {
-    type: time
-    timeframes: [raw, date, week, month, quarter, year]
-    convert_tz: no
-    datatype: date
-    sql: ${TABLE}.`Start Date 60` ;;
-  }
-
-  dimension_group: start_date_90 {
-    type: time
-    timeframes: [raw, date, week, month, quarter, year]
-    convert_tz: no
-    datatype: date
-    sql: ${TABLE}.`Start Date 90` ;;
   }
 
   # Measures
@@ -155,9 +115,5 @@ view: merinopy_averages {
   measure: suite_count_90 {
     type: sum
     sql: ${TABLE}.`Suite Count 90` ;;
-  }
-
-  measure: count {
-    type: count
   }
 }
