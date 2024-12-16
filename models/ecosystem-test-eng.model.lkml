@@ -46,6 +46,7 @@ explore: merinopy_automated_test_metrics {
           AND ${merinopy_results.test_suite} = ${merinopy_coverage.test_suite}
           AND ${merinopy_results.timestamp_date} = ${merinopy_coverage.timestamp_date}
           AND ${merinopy_results.job_number} = ${merinopy_coverage.job_number} ;;
+    required_joins: [merinopy_results]
   }
 }
 
