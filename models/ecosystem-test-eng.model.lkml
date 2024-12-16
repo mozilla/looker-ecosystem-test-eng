@@ -26,28 +26,8 @@ explore: merinopy_averages {}
 
 explore: merinopy_coverage {}
 
-explore: merinopy_automated_test_metrics {
-  view_name: merinopy_averages
-
-  join: merinopy_results {
-    type: left_outer
-    relationship: many_to_one
-    sql_on: ${merinopy_averages.repository} = ${merinopy_results.repository}
-          AND ${merinopy_averages.workflow} = ${merinopy_results.workflow}
-          AND ${merinopy_averages.test_suite} = ${merinopy_results.test_suite}
-          AND ${merinopy_averages.date_date} = ${merinopy_results.timestamp_date} ;;
-  }
-
-  join: merinopy_coverage {
-    type: left_outer
-    relationship: one_to_one
-    sql_on: ${merinopy_results.repository} = ${merinopy_coverage.repository}
-          AND ${merinopy_results.workflow} = ${merinopy_coverage.workflow}
-          AND ${merinopy_results.test_suite} = ${merinopy_coverage.test_suite}
-          AND ${merinopy_results.timestamp_date} = ${merinopy_coverage.timestamp_date}
-          AND ${merinopy_results.job_number} = ${merinopy_coverage.job_number} ;;
-    required_joins: [merinopy_results]
-  }
+explore: merinopy_test_metrics {
+  view_name: merinopy
 }
 
 explore: report_test_case_coverage {}
