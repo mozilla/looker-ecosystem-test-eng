@@ -22,7 +22,39 @@ view: merinopy {
       a.`Suite Count 60` AS averages_suite_count_60,
       a.`Suite Count 90` AS averages_suite_count_90,
 
-      -- Columns from merinopy_results
+      -- Columns from pre-joined merinopy_results and merinopy_coverage
+      rc.results_timestamp,
+      rc.results_job_number,
+      rc.results_status,
+      rc.results_execution_time,
+      rc.results_job_time,
+      rc.results_run_time,
+      rc.results_success,
+      rc.results_failure,
+      rc.results_skipped,
+      rc.results_fixme,
+      rc.results_unknown,
+      rc.results_retry_count,
+      rc.results_total,
+      rc.results_success_rate,
+      rc.results_failure_rate,
+      rc.coverage_branch_count,
+      rc.coverage_branch_covered,
+      rc.coverage_branch_not_covered,
+      rc.coverage_branch_percent,
+      rc.coverage_line_count,
+      rc.coverage_line_covered,
+      rc.coverage_line_not_covered,
+      rc.coverage_line_percent
+
+      FROM `test_metrics.merinopy_averages` a
+
+      -- Pre-join results and coverage, then join averages to the result
+      LEFT JOIN (
+      SELECT
+      r.Repository,
+      r.Workflow,
+      r.`Test Suite`,
       r.Timestamp AS results_timestamp,
       r.`Job Number` AS results_job_number,
       r.Status AS results_status,
@@ -42,9 +74,6 @@ view: merinopy {
       r.`Fixme Rate` AS results_fixme_rate,
       r.`Unknown Rate` AS results_unknown_rate,
 
-      -- Columns from merinopy_coverage
-      c.Timestamp AS coverage_timestamp,
-      c.`Job Number` AS coverage_job_number,
       c.`Branch Count` AS coverage_branch_count,
       c.`Branch Covered` AS coverage_branch_covered,
       c.`Branch Not Covered` AS coverage_branch_not_covered,
@@ -52,42 +81,9 @@ view: merinopy {
       c.`Line Count` AS coverage_line_count,
       c.`Line Covered` AS coverage_line_covered,
       c.`Line Not Covered` AS coverage_line_not_covered,
-      c.`Line Percent` AS coverage_line_percent,
+      c.`Line Excluded` AS coverage_line_excluded,
+      c.`Line Percent` AS coverage_line_percent
 
-      FROM `test_metrics.merinopy_averages` a
-
-      -- Pre-join merinopy_results and merinopy_coverage, then join merinopy_averages to the result
-      LEFT JOIN (
-      SELECT
-      r.Repository,
-      r.Workflow,
-      r.`Test Suite`,
-      r.Timestamp,
-      r.`Job Number`,
-      r.Status,
-      r.`Execution Time`,
-      r.`Job Time`,
-      r.`Run Time`,
-      r.Success,
-      r.Failure,
-      r.Skipped,
-      r.Fixme,
-      r.Unknown,
-      r.`Retry Count`,
-      r.Total,
-      r.`Success Rate`,
-      r.`Failure Rate`,
-      r.`Skipped Rate`,
-      r.`Fixme Rate`,
-      r.`Unknown Rate`,
-      c.`Branch Count`,
-      c.`Branch Covered`,
-      c.`Branch Not Covered`,
-      c.`Branch Percent`,
-      c.`Line Count`,
-      c.`Line Covered`,
-      c.`Line Not Covered`,
-      c.`Line Percent`,
       FROM `test_metrics.merinopy_results` r
       LEFT JOIN `test_metrics.merinopy_coverage` c
       ON r.Repository = c.Repository
@@ -98,7 +94,7 @@ view: merinopy {
       ON a.Repository = rc.Repository
       AND a.Workflow = rc.Workflow
       AND a.`Test Suite` = rc.`Test Suite`
-      AND a.`End Date 30` = DATE(rc.Timestamp) ;;
+      AND a.`End Date 30` = DATE(rc.results_timestamp) ;;
   }
 
   # Dimensions
@@ -151,7 +147,7 @@ view: merinopy {
     type: yesno
     sql: ${timestamp_raw} = (
           SELECT MAX(Timestamp)
-          FROM `test_metrics.autopushrs_results`
+          FROM `test_metrics.merinopy_results`
           WHERE
             `Test Suite` = ${test_suite}
             AND EXTRACT(YEAR FROM Timestamp) = EXTRACT(YEAR FROM ${timestamp_raw})
