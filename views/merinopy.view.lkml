@@ -135,7 +135,21 @@ view: merinopy {
     sql: ${TABLE}.averages_date ;;
   }
 
+  dimension_group: averages_date {
+    type: time
+    timeframes: [raw, date, week, month, quarter, year]
+    sql: ${TABLE}.averages_date ;;
+  }
+
   dimension_group: timestamp {
+    type: time
+    timeframes: [raw, time, date, week, month, quarter, year]
+    convert_tz: yes
+    datatype: timestamp
+    sql: ${TABLE}.results_timestamp ;;
+  }
+
+  dimension_group: results_timestamp {
     type: time
     timeframes: [raw, time, date, week, month, quarter, year]
     convert_tz: yes
