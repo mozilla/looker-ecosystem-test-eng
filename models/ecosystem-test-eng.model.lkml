@@ -20,12 +20,6 @@ explore: fxa_averages {}
 
 explore: fxa_results {}
 
-explore: merinopy_results {}
-
-explore: merinopy_averages {}
-
-explore: merinopy_coverage {}
-
 explore: merinopy_test_metrics {
   view_name: merinopy
 }

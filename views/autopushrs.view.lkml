@@ -6,11 +6,6 @@ view: autopushrs {
       a.Workflow AS workflow,
       a.`Test Suite` AS test_suite,
       a.`End Date 30` AS end_date_30,
-      a.`End Date 60` AS end_date_60,
-      a.`End Date 90` AS end_date_90,
-      a.`Start Date 30` AS start_date_30,
-      a.`Start Date 60` AS start_date_60,
-      a.`Start Date 90` AS start_date_90,
       a.`Execution Time 30` AS averages_execution_time_30,
       a.`Execution Time 60` AS averages_execution_time_60,
       a.`Execution Time 90` AS averages_execution_time_90,
@@ -50,10 +45,6 @@ view: autopushrs {
       -- Columns from autopushrs_coverage
       c.Timestamp AS coverage_timestamp,
       c.`Job Number` AS coverage_job_number,
-      c.`Branch Count` AS coverage_branch_count,
-      c.`Branch Covered` AS coverage_branch_covered,
-      c.`Branch Not Covered` AS coverage_branch_not_covered,
-      c.`Branch Percent` AS coverage_branch_percent,
       c.`Line Count` AS coverage_line_count,
       c.`Line Covered` AS coverage_line_covered,
       c.`Line Not Covered` AS coverage_line_not_covered,
@@ -109,28 +100,10 @@ view: autopushrs {
   # Dates and timestamps can be represented in Looker using a dimension group of type: time.
   # Looker converts dates and timestamps to the specified timeframes within the dimension group.
 
-  dimension_group: end_date {
+  dimension_group: date {
     type: time
     timeframes: [raw, date, week, month, quarter, year]
     sql: ${TABLE}.end_date_30 ;;
-  }
-
-  dimension_group: start_date_30 {
-    type: time
-    timeframes: [raw, date, week, month, quarter, year]
-    sql: ${TABLE}.start_date_30 ;;
-  }
-
-  dimension_group: start_date_60 {
-    type: time
-    timeframes: [raw, date, week, month, quarter, year]
-    sql: ${TABLE}.start_date_60 ;;
-  }
-
-  dimension_group: start_date_90 {
-    type: time
-    timeframes: [raw, date, week, month, quarter, year]
-    sql: ${TABLE}.start_date_90 ;;
   }
 
   dimension_group: timestamp {
@@ -155,26 +128,6 @@ view: autopushrs {
 
 
   # Measures
-  measure: branch_count {
-    type: sum
-    sql: ${TABLE}.coverage_branch_count ;;
-  }
-
-  measure:branch_covered {
-    type: sum
-    sql: ${TABLE}.coverage_branch_covered ;;
-  }
-
-  measure: branch_not_covered {
-    type: sum
-    sql: ${TABLE}.coverage_branch_not_covered ;;
-  }
-
-  measure: branch_percent {
-    type: average
-    sql: ${TABLE}.coverage_branch_percent ;;
-  }
-
   measure: execution_time {
     type: average
     sql: ${TABLE}.results_execution_time ;;
