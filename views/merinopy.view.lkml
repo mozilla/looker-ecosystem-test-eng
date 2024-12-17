@@ -5,7 +5,7 @@ view: merinopy {
       a.Repository AS repository,
       a.Workflow AS workflow,
       a.`Test Suite` AS test_suite,
-      a.`End Date 30` AS averages_date,
+      a.`End Date 30` AS end_date_30,
       a.`Execution Time 30` AS averages_execution_time_30,
       a.`Execution Time 60` AS averages_execution_time_60,
       a.`Execution Time 90` AS averages_execution_time_90,
@@ -22,39 +22,7 @@ view: merinopy {
       a.`Suite Count 60` AS averages_suite_count_60,
       a.`Suite Count 90` AS averages_suite_count_90,
 
-      -- Columns from pre-joined merinopy_results and merinopy_coverage
-      rc.results_timestamp,
-      rc.results_job_number,
-      rc.results_status,
-      rc.results_execution_time,
-      rc.results_job_time,
-      rc.results_run_time,
-      rc.results_success,
-      rc.results_failure,
-      rc.results_skipped,
-      rc.results_fixme,
-      rc.results_unknown,
-      rc.results_retry_count,
-      rc.results_total,
-      rc.results_success_rate,
-      rc.results_failure_rate,
-      rc.coverage_branch_count,
-      rc.coverage_branch_covered,
-      rc.coverage_branch_not_covered,
-      rc.coverage_branch_percent,
-      rc.coverage_line_count,
-      rc.coverage_line_covered,
-      rc.coverage_line_not_covered,
-      rc.coverage_line_percent
-
-      FROM `test_metrics.merinopy_averages` a
-
-      -- Pre-join results and coverage, then join averages to the result
-      LEFT JOIN (
-      SELECT
-      r.Repository,
-      r.Workflow,
-      r.`Test Suite`,
+      -- Columns from merinopy_results
       r.Timestamp AS results_timestamp,
       r.`Job Number` AS results_job_number,
       r.Status AS results_status,
@@ -74,6 +42,9 @@ view: merinopy {
       r.`Fixme Rate` AS results_fixme_rate,
       r.`Unknown Rate` AS results_unknown_rate,
 
+      -- Columns from merinopy_coverage
+      c.Timestamp AS coverage_timestamp,
+      c.`Job Number` AS coverage_job_number,
       c.`Branch Count` AS coverage_branch_count,
       c.`Branch Covered` AS coverage_branch_covered,
       c.`Branch Not Covered` AS coverage_branch_not_covered,
@@ -81,20 +52,20 @@ view: merinopy {
       c.`Line Count` AS coverage_line_count,
       c.`Line Covered` AS coverage_line_covered,
       c.`Line Not Covered` AS coverage_line_not_covered,
-      c.`Line Excluded` AS coverage_line_excluded,
-      c.`Line Percent` AS coverage_line_percent
+      c.`Line Percent` AS coverage_line_percent,
 
-      FROM `test_metrics.merinopy_results` r
+      FROM `test_metrics.merinopy_averages` a
+      LEFT JOIN `test_metrics.merinopy_results` r
+      ON a.Repository = r.Repository
+      AND a.Workflow = r.Workflow
+      AND a.`Test Suite` = r.`Test Suite`
+      AND a.`End Date 30` = DATE(r.Timestamp)
       LEFT JOIN `test_metrics.merinopy_coverage` c
-      ON r.Repository = c.Repository
-      AND r.Workflow = c.Workflow
-      AND r.`Test Suite` = c.`Test Suite`
-      AND r.`Job Number` = c.`Job Number`
-      ) rc
-      ON a.Repository = rc.Repository
-      AND a.Workflow = rc.Workflow
-      AND a.`Test Suite` = rc.`Test Suite`
-      AND a.`End Date 30` = DATE(rc.results_timestamp) ;;
+      ON a.Repository = c.Repository
+      AND a.Workflow = c.Workflow
+      AND a.`Test Suite` = c.`Test Suite`
+      AND a.`End Date 30` = DATE(c.Timestamp)
+      AND r.`Job Number` = c.`Job Number` ;;
   }
 
   # Dimensions
@@ -132,24 +103,10 @@ view: merinopy {
   dimension_group: date {
     type: time
     timeframes: [raw, date, week, month, quarter, year]
-    sql: ${TABLE}.averages_date ;;
-  }
-
-  dimension_group: averages_date {
-    type: time
-    timeframes: [raw, date, week, month, quarter, year]
-    sql: ${TABLE}.averages_date ;;
+    sql: ${TABLE}.end_date_30 ;;
   }
 
   dimension_group: timestamp {
-    type: time
-    timeframes: [raw, time, date, week, month, quarter, year]
-    convert_tz: yes
-    datatype: timestamp
-    sql: ${TABLE}.results_timestamp ;;
-  }
-
-  dimension_group: results_timestamp {
     type: time
     timeframes: [raw, time, date, week, month, quarter, year]
     convert_tz: yes
@@ -168,6 +125,7 @@ view: merinopy {
             AND EXTRACT(QUARTER FROM Timestamp) = EXTRACT(QUARTER FROM ${timestamp_raw})
         ) ;;
   }
+
 
   # Measures
   measure: branch_count {
