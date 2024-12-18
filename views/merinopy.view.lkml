@@ -50,7 +50,7 @@ view: merinopy {
         c.`Line Count` AS coverage_line_count,
         c.`Line Covered` AS coverage_line_covered,
         c.`Line Not Covered` AS coverage_line_not_covered,
-        c.`Line Excluded` AS coverage_line_excluded
+        c.`Line Excluded` AS coverage_line_excluded,
         c.`Line Percent` AS coverage_line_percent
 
       FROM `test_metrics.merinopy_results` r
@@ -117,7 +117,7 @@ view: merinopy {
         c.`Line Count` AS coverage_line_count,
         c.`Line Covered` AS coverage_line_covered,
         c.`Line Not Covered` AS coverage_line_not_covered,
-        c.`Line Excluded` AS coverage_line_excluded
+        c.`Line Excluded` AS coverage_line_excluded,
         c.`Line Percent` AS coverage_line_percent
 
       FROM `test_metrics.merinopy_averages` a
