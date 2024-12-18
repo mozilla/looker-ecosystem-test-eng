@@ -5,10 +5,12 @@ view: merinopy {
         r.Repository AS repository,
         r.Workflow AS workflow,
         r.`Test Suite` AS test_suite,
+        COALESCE(a.`End Date 30`, DATE(r.Timestamp)) AS end_date_30,
         r.Timestamp AS results_timestamp,
         r.`Is Last Quarter Date` AS results_is_last_quarter_date,
         r.`Job Number` AS results_job_number,
         r.Status AS results_status,
+
         r.`Execution Time` AS results_execution_time,
         r.`Job Time` AS results_job_time,
         r.`Run Time` AS results_run_time,
@@ -25,7 +27,6 @@ view: merinopy {
         r.`Fixme Rate` AS results_fixme_rate,
         r.`Unknown Rate` AS results_unknown_rate,
 
-        COALESCE(a.`End Date 30`, DATE(r.Timestamp)) AS end_date_30,
         a.`Execution Time 30` AS averages_execution_time_30,
         a.`Execution Time 60` AS averages_execution_time_60,
         a.`Execution Time 90` AS averages_execution_time_90,
@@ -42,8 +43,6 @@ view: merinopy {
         a.`Suite Count 60` AS averages_suite_count_60,
         a.`Suite Count 90` AS averages_suite_count_90,
 
-        c.Timestamp AS coverage_timestamp,
-        c.`Job Number` AS coverage_job_number,
         c.`Branch Count` AS coverage_branch_count,
         c.`Branch Covered` AS coverage_branch_covered,
         c.`Branch Not Covered` AS coverage_branch_not_covered,
@@ -51,6 +50,7 @@ view: merinopy {
         c.`Line Count` AS coverage_line_count,
         c.`Line Covered` AS coverage_line_covered,
         c.`Line Not Covered` AS coverage_line_not_covered,
+        c.`Line Excluded` AS coverage_line_excluded
         c.`Line Percent` AS coverage_line_percent
 
       FROM `test_metrics.merinopy_results` r
@@ -72,27 +72,12 @@ view: merinopy {
         a.Repository AS repository,
         a.Workflow AS workflow,
         a.`Test Suite` AS test_suite,
-        a.`End Date 30` AS end_date_30,
-        a.`Execution Time 30` AS averages_execution_time_30,
-        a.`Execution Time 60` AS averages_execution_time_60,
-        a.`Execution Time 90` AS averages_execution_time_90,
-        a.`Job Time 30` AS averages_job_time_30,
-        a.`Job Time 60` AS averages_job_time_60,
-        a.`Job Time 90` AS averages_job_time_90,
-        a.`Run Time 30` AS averages_run_time_30,
-        a.`Run Time 60` AS averages_run_time_60,
-        a.`Run Time 90` AS averages_run_time_90,
-        a.`Success Rate 30` AS averages_success_rate_30,
-        a.`Success Rate 60` AS averages_success_rate_60,
-        a.`Success Rate 90` AS averages_success_rate_90,
-        a.`Suite Count 30` AS averages_suite_count_30,
-        a.`Suite Count 60` AS averages_suite_count_60,
-        a.`Suite Count 90` AS averages_suite_count_90,
-
+        CAST(a.`End Date 30` AS DATE) AS end_date_30,
         r.Timestamp AS results_timestamp,
         r.`Is Last Quarter Date` AS results_is_last_quarter_date,
         r.`Job Number` AS results_job_number,
         r.Status AS results_status,
+
         r.`Execution Time` AS results_execution_time,
         r.`Job Time` AS results_job_time,
         r.`Run Time` AS results_run_time,
@@ -109,8 +94,22 @@ view: merinopy {
         r.`Fixme Rate` AS results_fixme_rate,
         r.`Unknown Rate` AS results_unknown_rate,
 
-        c.Timestamp AS coverage_timestamp,
-        c.`Job Number` AS coverage_job_number,
+        a.`Execution Time 30` AS averages_execution_time_30,
+        a.`Execution Time 60` AS averages_execution_time_60,
+        a.`Execution Time 90` AS averages_execution_time_90,
+        a.`Job Time 30` AS averages_job_time_30,
+        a.`Job Time 60` AS averages_job_time_60,
+        a.`Job Time 90` AS averages_job_time_90,
+        a.`Run Time 30` AS averages_run_time_30,
+        a.`Run Time 60` AS averages_run_time_60,
+        a.`Run Time 90` AS averages_run_time_90,
+        a.`Success Rate 30` AS averages_success_rate_30,
+        a.`Success Rate 60` AS averages_success_rate_60,
+        a.`Success Rate 90` AS averages_success_rate_90,
+        a.`Suite Count 30` AS averages_suite_count_30,
+        a.`Suite Count 60` AS averages_suite_count_60,
+        a.`Suite Count 90` AS averages_suite_count_90,
+
         c.`Branch Count` AS coverage_function_count,
         c.`Branch Covered` AS coverage_function_covered,
         c.`Branch Not Covered` AS coverage_function_not_covered,
@@ -118,6 +117,7 @@ view: merinopy {
         c.`Line Count` AS coverage_line_count,
         c.`Line Covered` AS coverage_line_covered,
         c.`Line Not Covered` AS coverage_line_not_covered,
+        c.`Line Excluded` AS coverage_line_excluded
         c.`Line Percent` AS coverage_line_percent
 
       FROM `test_metrics.merinopy_averages` a
