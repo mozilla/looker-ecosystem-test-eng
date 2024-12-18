@@ -1,26 +1,27 @@
 view: merinopy {
   derived_table: {
-    sql: SELECT
-      -- Columns from merinopy_averages
-      a.Repository AS repository,
-      a.Workflow AS workflow,
-      a.`Test Suite` AS test_suite,
-      a.`End Date 30` AS end_date_30,
-      a.`Execution Time 30` AS averages_execution_time_30,
-      a.`Execution Time 60` AS averages_execution_time_60,
-      a.`Execution Time 90` AS averages_execution_time_90,
-      a.`Job Time 30` AS averages_job_time_30,
-      a.`Job Time 60` AS averages_job_time_60,
-      a.`Job Time 90` AS averages_job_time_90,
-      a.`Run Time 30` AS averages_run_time_30,
-      a.`Run Time 60` AS averages_run_time_60,
-      a.`Run Time 90` AS averages_run_time_90,
-      a.`Success Rate 30` AS averages_success_rate_30,
-      a.`Success Rate 60` AS averages_success_rate_60,
-      a.`Success Rate 90` AS averages_success_rate_90,
-      a.`Suite Count 30` AS averages_suite_count_30,
-      a.`Suite Count 60` AS averages_suite_count_60,
-      a.`Suite Count 90` AS averages_suite_count_90,
+    sql:
+      SELECT
+        -- Columns from merinopy_averages
+        a.Repository AS repository,
+        a.Workflow AS workflow,
+        a.`Test Suite` AS test_suite,
+        a.`End Date 30` AS end_date_30,
+        a.`Execution Time 30` AS averages_execution_time_30,
+        a.`Execution Time 60` AS averages_execution_time_60,
+        a.`Execution Time 90` AS averages_execution_time_90,
+        a.`Job Time 30` AS averages_job_time_30,
+        a.`Job Time 60` AS averages_job_time_60,
+        a.`Job Time 90` AS averages_job_time_90,
+        a.`Run Time 30` AS averages_run_time_30,
+        a.`Run Time 60` AS averages_run_time_60,
+        a.`Run Time 90` AS averages_run_time_90,
+        a.`Success Rate 30` AS averages_success_rate_30,
+        a.`Success Rate 60` AS averages_success_rate_60,
+        a.`Success Rate 90` AS averages_success_rate_90,
+        a.`Suite Count 30` AS averages_suite_count_30,
+        a.`Suite Count 60` AS averages_suite_count_60,
+        a.`Suite Count 90` AS averages_suite_count_90,
 
       -- Columns from merinopy_results
       r.Timestamp AS results_timestamp,
@@ -53,7 +54,7 @@ view: merinopy {
       c.`Line Count` AS coverage_line_count,
       c.`Line Covered` AS coverage_line_covered,
       c.`Line Not Covered` AS coverage_line_not_covered,
-      c.`Line Percent` AS coverage_line_percent,
+      c.`Line Percent` AS coverage_line_percent
 
       FROM `test_metrics.merinopy_averages` a
       LEFT JOIN `test_metrics.merinopy_results` r
@@ -66,7 +67,75 @@ view: merinopy {
       AND a.Workflow = c.Workflow
       AND a.`Test Suite` = c.`Test Suite`
       AND a.`End Date 30` = DATE(c.Timestamp)
-      AND r.`Job Number` = c.`Job Number` ;;
+      AND r.`Job Number` = c.`Job Number`
+
+      UNION ALL
+
+      SELECT
+      -- Include columns from `merinopy_averages` with NULLs for unmatched rows
+      r.Repository AS repository,
+      r.Workflow AS workflow,
+      r.`Test Suite` AS test_suite,
+      DATE(r.Timestamp) AS end_date_30,
+      NULL AS averages_execution_time_30,
+      NULL AS averages_execution_time_60,
+      NULL AS averages_execution_time_90,
+      NULL AS averages_job_time_30,
+      NULL AS averages_job_time_60,
+      NULL AS averages_job_time_90,
+      NULL AS averages_run_time_30,
+      NULL AS averages_run_time_60,
+      NULL AS averages_run_time_90,
+      NULL AS averages_success_rate_30,
+      NULL AS averages_success_rate_60,
+      NULL AS averages_success_rate_90,
+      NULL AS averages_suite_count_30,
+      NULL AS averages_suite_count_60,
+      NULL AS averages_suite_count_90,
+
+      -- Columns from `merinopy_results`
+      r.Timestamp AS results_timestamp,
+      r.`Is Last Quarter Date` AS results_is_last_quarter_date,
+      r.`Job Number` AS results_job_number,
+      r.Status AS results_status,
+      r.`Execution Time` AS results_execution_time,
+      r.`Job Time` AS results_job_time,
+      r.`Run Time` AS results_run_time,
+      r.Success AS results_success,
+      r.Failure AS results_failure,
+      r.Skipped AS results_skipped,
+      r.Fixme AS results_fixme,
+      r.Unknown AS results_unknown,
+      r.`Retry Count` AS results_retry_count,
+      r.Total AS results_total,
+      r.`Success Rate` AS results_success_rate,
+      r.`Failure Rate` AS results_failure_rate,
+      r.`Skipped Rate` AS results_skipped_rate,
+      r.`Fixme Rate` AS results_fixme_rate,
+      r.`Unknown Rate` AS results_unknown_rate,
+
+      -- Columns from `merinopy_coverage`
+      r.Timestamp AS coverage_timestamp,
+      r.`Job Number` AS coverage_job_number,
+      NULL AS coverage_branch_count,
+      NULL AS coverage_branch_covered,
+      NULL AS coverage_branch_not_covered,
+      NULL AS coverage_branch_percent,
+      NULL AS coverage_line_count,
+      NULL AS coverage_line_covered,
+      NULL AS coverage_line_not_covered,
+      NULL AS coverage_line_percent
+      FROM `test_metrics.merinopy_results` r
+      LEFT JOIN `test_metrics.merinopy_averages` a
+      ON a.Repository = r.Repository
+      AND a.Workflow = r.Workflow
+      AND a.`Test Suite` = r.`Test Suite`
+      AND a.`End Date 30` = DATE(r.Timestamp)
+      LEFT JOIN `test_metrics.merinopy_coverage` c
+      ON c.Repository = r.Repository
+      AND c.Workflow = r.Workflow
+      AND c.`Test Suite` = r.`Test Suite`
+      AND c.Timestamp = r.Timestamp ;;
   }
 
   # Dimensions
