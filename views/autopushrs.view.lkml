@@ -43,23 +43,23 @@ view: autopushrs {
         a.`Suite Count 60` AS averages_suite_count_60,
         a.`Suite Count 90` AS averages_suite_count_90,
 
-        c.`Function Count` AS coverage_branch_count,
-        c.`Function Covered` AS coverage_branch_covered,
-        c.`Function Not Covered` AS coverage_branch_not_covered,
-        c.`Function Percent` AS coverage_branch_percent,
+        c.`Function Count` AS coverage_function_count,
+        c.`Function Covered` AS coverage_function_covered,
+        c.`Function Not Covered` AS coverage_function_not_covered,
+        c.`Function Percent` AS coverage_function_percent,
         c.`Line Count` AS coverage_line_count,
         c.`Line Covered` AS coverage_line_covered,
         c.`Line Not Covered` AS coverage_line_not_covered,
         c.`Line Excluded` AS coverage_line_excluded,
         c.`Line Percent` AS coverage_line_percent
 
-      FROM `test_metrics.merinopy_results` r
-      LEFT JOIN `test_metrics.merinopy_averages` a
+      FROM `test_metrics.autopushrs_results` r
+      LEFT JOIN `test_metrics.autopushrs_averages` a
       ON r.Repository = a.Repository
       AND r.Workflow = a.Workflow
       AND r.`Test Suite` = a.`Test Suite`
       AND DATE(r.Timestamp) = a.`End Date 30`
-      LEFT JOIN `test_metrics.merinopy_coverage` c
+      LEFT JOIN `test_metrics.autopushrs_coverage` c
       ON r.Repository = c.Repository
       AND r.Workflow = c.Workflow
       AND r.`Test Suite` = c.`Test Suite`
@@ -120,13 +120,13 @@ view: autopushrs {
         c.`Line Excluded` AS coverage_line_excluded,
         c.`Line Percent` AS coverage_line_percent
 
-      FROM `test_metrics.merinopy_averages` a
-      LEFT JOIN `test_metrics.merinopy_results` r
+      FROM `test_metrics.autopushrs_averages` a
+      LEFT JOIN `test_metrics.autopushrs_results` r
       ON a.Repository = r.Repository
       AND a.Workflow = r.Workflow
       AND a.`Test Suite` = r.`Test Suite`
       AND a.`End Date 30` = DATE(r.Timestamp)
-      LEFT JOIN `test_metrics.merinopy_coverage` c
+      LEFT JOIN `test_metrics.autopushrs_coverage` c
       ON r.Repository = c.Repository
       AND r.Workflow = c.Workflow
       AND r.`Test Suite` = c.`Test Suite`
