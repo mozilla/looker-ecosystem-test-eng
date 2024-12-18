@@ -7,7 +7,6 @@ view: merinopy {
         r.`Test Suite` AS test_suite,
         COALESCE(a.`End Date 30`, DATE(r.Timestamp)) AS end_date_30,
         r.Timestamp AS results_timestamp,
-        r.`Is Last Quarter Date` AS results_is_last_quarter_date,
         r.`Job Number` AS results_job_number,
         r.Status AS results_status,
 
@@ -74,7 +73,6 @@ view: merinopy {
         a.`Test Suite` AS test_suite,
         CAST(a.`End Date 30` AS DATE) AS end_date_30,
         r.Timestamp AS results_timestamp,
-        r.`Is Last Quarter Date` AS results_is_last_quarter_date,
         r.`Job Number` AS results_job_number,
         r.Status AS results_status,
 
@@ -187,7 +185,14 @@ view: merinopy {
 
   dimension: is_last_quarter_date {
     type: yesno
-    sql: ${TABLE}.results_is_last_quarter_date;;
+    sql: ${timestamp_raw} = (
+          SELECT MAX(Timestamp)
+          FROM `test_metrics.merinopy_results`
+          WHERE
+            `Test Suite` = ${test_suite}
+            AND EXTRACT(YEAR FROM Timestamp) = EXTRACT(YEAR FROM ${timestamp_raw})
+            AND EXTRACT(QUARTER FROM Timestamp) = EXTRACT(QUARTER FROM ${timestamp_raw})
+        ) ;;
   }
 
   # Measures
