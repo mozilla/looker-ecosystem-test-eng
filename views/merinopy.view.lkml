@@ -125,6 +125,11 @@ view: merinopy {
       AND a.Workflow = r.Workflow
       AND a.`Test Suite` = r.`Test Suite`
       AND a.`End Date 30` = DATE(r.Timestamp)
+      LEFT JOIN `test_metrics.merinopy_coverage` c
+      ON r.Repository = c.Repository
+      AND r.Workflow = c.Workflow
+      AND r.`Test Suite` = c.`Test Suite`
+      AND r.`Job Number` = c.`Job Number`
       WHERE r.Repository IS NULL
       AND r.Workflow IS NULL
       AND r.`Test Suite` IS NULL
