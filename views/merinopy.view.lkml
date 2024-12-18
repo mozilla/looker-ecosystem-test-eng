@@ -63,6 +63,7 @@ view: merinopy {
       ON r.Repository = c.Repository
       AND r.Workflow = c.Workflow
       AND r.`Test Suite` = c.`Test Suite`
+      AND DATE(r.Timestamp) = DATE(c.Timestamp)
       AND r.`Job Number` = c.`Job Number`
 
       UNION ALL
@@ -129,6 +130,7 @@ view: merinopy {
       ON r.Repository = c.Repository
       AND r.Workflow = c.Workflow
       AND r.`Test Suite` = c.`Test Suite`
+      AND DATE(r.Timestamp) = DATE(c.Timestamp)
       AND r.`Job Number` = c.`Job Number`
       WHERE r.Repository IS NULL
       AND r.Workflow IS NULL
