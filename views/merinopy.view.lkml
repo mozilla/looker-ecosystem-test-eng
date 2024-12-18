@@ -1,7 +1,7 @@
 view: merinopy {
   derived_table: {
     sql:
-      SELECT
+      SELECT DISTINCT
         -- Columns from merinopy_averages
         a.Repository AS repository,
         a.Workflow AS workflow,
@@ -71,7 +71,7 @@ view: merinopy {
 
       UNION ALL
 
-      SELECT
+      SELECT DISTINCT
       -- Include columns from `merinopy_averages` with NULLs for unmatched rows
       r.Repository AS repository,
       r.Workflow AS workflow,
@@ -115,16 +115,16 @@ view: merinopy {
       r.`Unknown Rate` AS results_unknown_rate,
 
       -- Columns from `merinopy_coverage`
-      r.Timestamp AS coverage_timestamp,
-      r.`Job Number` AS coverage_job_number,
-      NULL AS coverage_branch_count,
-      NULL AS coverage_branch_covered,
-      NULL AS coverage_branch_not_covered,
-      NULL AS coverage_branch_percent,
-      NULL AS coverage_line_count,
-      NULL AS coverage_line_covered,
-      NULL AS coverage_line_not_covered,
-      NULL AS coverage_line_percent
+      COALESCE(c.Timestamp, r.Timestamp) AS coverage_timestamp,
+      COALESCE(c.`Job Number`, r.`Job Number`) AS coverage_job_number,
+      c.`Branch Count` AS coverage_branch_count,
+      c.`Branch Covered` AS coverage_branch_covered,
+      c.`Branch Not Covered` AS coverage_branch_not_covered,
+      c.`Branch Percent` AS coverage_branch_percent,
+      c.`Line Count` AS coverage_line_count,
+      c.`Line Covered` AS coverage_line_covered,
+      c.`Line Not Covered` AS coverage_line_not_covered,
+      c.`Line Percent` AS coverage_line_percent
       FROM `test_metrics.merinopy_results` r
       LEFT JOIN `test_metrics.merinopy_averages` a
       ON a.Repository = r.Repository
