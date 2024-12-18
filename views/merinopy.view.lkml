@@ -123,7 +123,7 @@ view: merinopy {
             `Test Suite` = ${test_suite}
             AND EXTRACT(YEAR FROM Timestamp) = EXTRACT(YEAR FROM ${timestamp_raw})
             AND EXTRACT(QUARTER FROM Timestamp) = EXTRACT(QUARTER FROM ${timestamp_raw})
-       ) AND ${timestamp_raw} IS NOT NULL ;;
+       ) ;;
   }
 
   # Measures
