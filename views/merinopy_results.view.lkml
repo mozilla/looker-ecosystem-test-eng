@@ -49,13 +49,7 @@ view: merinopy_results {
 
   dimension: is_last_quarter_date {
     type: yesno
-    sql: ${timestamp_raw} = (
-          SELECT MAX(Timestamp)
-          FROM `test_metrics.merinopy_results`
-          WHERE
-            EXTRACT(YEAR FROM Timestamp) = EXTRACT(YEAR FROM ${timestamp_raw})
-            AND EXTRACT(QUARTER FROM Timestamp) = EXTRACT(QUARTER FROM ${timestamp_raw})
-        ) ;;
+    sql: ${TABLE}.`Is Last Quarter Date` ;;
   }
 
   # Measures
