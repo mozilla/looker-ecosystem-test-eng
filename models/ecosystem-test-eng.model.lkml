@@ -16,6 +16,10 @@ explore: autopushrs_test_metrics {
   view_name: autopushrs
 }
 
+explore: fxa_test_metrics {
+  view_name: fxa
+}
+
 explore: fxa_averages {}
 
 explore: fxa_results {}
