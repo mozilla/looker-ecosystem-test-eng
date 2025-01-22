@@ -52,7 +52,7 @@ view: merinopy {
         c.`Line Excluded` AS coverage_line_excluded,
         c.`Line Percent` AS coverage_line_percent
 
-      FROM `test_metrics.merinopy_results` r
+      FROM `test_metrics.merinopy_suite_results` r
       LEFT JOIN `test_metrics.merinopy_averages` a
       ON r.Repository = a.Repository
       AND r.Workflow = a.Workflow
@@ -119,7 +119,7 @@ view: merinopy {
         c.`Line Percent` AS coverage_line_percent
 
       FROM `test_metrics.merinopy_averages` a
-      LEFT JOIN `test_metrics.merinopy_results` r
+      LEFT JOIN `test_metrics.merinopy_suite_results` r
       ON a.Repository = r.Repository
       AND a.Workflow = r.Workflow
       AND a.`Test Suite` = r.`Test Suite`
@@ -187,7 +187,7 @@ view: merinopy {
     type: yesno
     sql: ${timestamp_raw} = (
           SELECT MAX(Timestamp)
-          FROM `test_metrics.merinopy_results`
+          FROM `test_metrics.merinopy_suite_results`
           WHERE
             `Test Suite` = ${test_suite}
             AND EXTRACT(YEAR FROM Timestamp) = EXTRACT(YEAR FROM ${timestamp_raw})
@@ -254,26 +254,6 @@ view: merinopy {
   measure: fixme_rate {
     type: average
     sql: ${TABLE}.results_fixme_rate ;;
-  }
-
-  measure: job_time {
-    type: average
-    sql: ${TABLE}.results_job_time ;;
-  }
-
-  measure: job_time_30 {
-    type: average
-    sql: ${TABLE}.averages_job_time_30 ;;
-  }
-
-  measure: job_time_60 {
-    type: average
-    sql: ${TABLE}.averages_job_time_60 ;;
-  }
-
-  measure: job_time_90 {
-    type: average
-    sql: ${TABLE}.averages_job_time_90 ;;
   }
 
   measure: line_count {
@@ -379,15 +359,5 @@ view: merinopy {
   measure: total {
     type: sum
     sql: ${TABLE}.results_total ;;
-  }
-
-  measure: unknown {
-    type: sum
-    sql: ${TABLE}.results_unknown ;;
-  }
-
-  measure: unknown_rate {
-    type: average
-    sql: ${TABLE}.results_unknown_rate ;;
   }
 }
