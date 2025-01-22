@@ -11,27 +11,21 @@ view: autopushrs {
         r.Status AS results_status,
 
         r.`Execution Time` AS results_execution_time,
-        r.`Job Time` AS results_job_time,
         r.`Run Time` AS results_run_time,
         r.Success AS results_success,
         r.Failure AS results_failure,
         r.Skipped AS results_skipped,
         r.Fixme AS results_fixme,
-        r.Unknown AS results_unknown,
         r.`Retry Count` AS results_retry_count,
         r.Total AS results_total,
         r.`Success Rate` AS results_success_rate,
         r.`Failure Rate` AS results_failure_rate,
         r.`Skipped Rate` AS results_skipped_rate,
         r.`Fixme Rate` AS results_fixme_rate,
-        r.`Unknown Rate` AS results_unknown_rate,
 
         a.`Execution Time 30` AS averages_execution_time_30,
         a.`Execution Time 60` AS averages_execution_time_60,
         a.`Execution Time 90` AS averages_execution_time_90,
-        a.`Job Time 30` AS averages_job_time_30,
-        a.`Job Time 60` AS averages_job_time_60,
-        a.`Job Time 90` AS averages_job_time_90,
         a.`Run Time 30` AS averages_run_time_30,
         a.`Run Time 60` AS averages_run_time_60,
         a.`Run Time 90` AS averages_run_time_90,
@@ -52,7 +46,7 @@ view: autopushrs {
         c.`Line Excluded` AS coverage_line_excluded,
         c.`Line Percent` AS coverage_line_percent
 
-      FROM `test_metrics.autopushrs_results` r
+      FROM `test_metrics.autopushrs_suite_results` r
       LEFT JOIN `test_metrics.autopushrs_averages` a
       ON r.Repository = a.Repository
       AND r.Workflow = a.Workflow
@@ -77,27 +71,21 @@ view: autopushrs {
         r.Status AS results_status,
 
         r.`Execution Time` AS results_execution_time,
-        r.`Job Time` AS results_job_time,
         r.`Run Time` AS results_run_time,
         r.Success AS results_success,
         r.Failure AS results_failure,
         r.Skipped AS results_skipped,
         r.Fixme AS results_fixme,
-        r.Unknown AS results_unknown,
         r.`Retry Count` AS results_retry_count,
         r.Total AS results_total,
         r.`Success Rate` AS results_success_rate,
         r.`Failure Rate` AS results_failure_rate,
         r.`Skipped Rate` AS results_skipped_rate,
         r.`Fixme Rate` AS results_fixme_rate,
-        r.`Unknown Rate` AS results_unknown_rate,
 
         a.`Execution Time 30` AS averages_execution_time_30,
         a.`Execution Time 60` AS averages_execution_time_60,
         a.`Execution Time 90` AS averages_execution_time_90,
-        a.`Job Time 30` AS averages_job_time_30,
-        a.`Job Time 60` AS averages_job_time_60,
-        a.`Job Time 90` AS averages_job_time_90,
         a.`Run Time 30` AS averages_run_time_30,
         a.`Run Time 60` AS averages_run_time_60,
         a.`Run Time 90` AS averages_run_time_90,
@@ -119,7 +107,7 @@ view: autopushrs {
         c.`Line Percent` AS coverage_line_percent
 
       FROM `test_metrics.autopushrs_averages` a
-      LEFT JOIN `test_metrics.autopushrs_results` r
+      LEFT JOIN `test_metrics.autopushrs_suite_results` r
       ON a.Repository = r.Repository
       AND a.Workflow = r.Workflow
       AND a.`Test Suite` = r.`Test Suite`
@@ -187,7 +175,7 @@ view: autopushrs {
     type: yesno
     sql: ${timestamp_raw} = (
           SELECT MAX(Timestamp)
-          FROM `test_metrics.autopushrs_results`
+          FROM `test_metrics.autopushrs_suite_results`
           WHERE
             `Test Suite` = ${test_suite}
             AND EXTRACT(YEAR FROM Timestamp) = EXTRACT(YEAR FROM ${timestamp_raw})
@@ -255,26 +243,6 @@ view: autopushrs {
   measure: function_percent {
     type: average
     sql: ${TABLE}.coverage_function_percent ;;
-  }
-
-  measure: job_time {
-    type: average
-    sql: ${TABLE}.results_job_time ;;
-  }
-
-  measure: job_time_30 {
-    type: average
-    sql: ${TABLE}.averages_job_time_30 ;;
-  }
-
-  measure: job_time_60 {
-    type: average
-    sql: ${TABLE}.averages_job_time_60 ;;
-  }
-
-  measure: job_time_90 {
-    type: average
-    sql: ${TABLE}.averages_job_time_90 ;;
   }
 
   measure: line_count {
@@ -380,15 +348,5 @@ view: autopushrs {
   measure: total {
     type: sum
     sql: ${TABLE}.results_total ;;
-  }
-
-  measure: unknown {
-    type: sum
-    sql: ${TABLE}.results_unknown ;;
-  }
-
-  measure: unknown_rate {
-    type: average
-    sql: ${TABLE}.results_unknown_rate ;;
   }
 }
