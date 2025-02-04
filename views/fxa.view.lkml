@@ -146,7 +146,8 @@ view: fxa {
           SELECT MAX(Timestamp)
           FROM `test_metrics.fxa_suite_results`
           WHERE
-            `Test Suite` = ${test_suite}
+            `Workflow` = ${workflow}
+            AND `Test Suite` = ${test_suite}
             AND EXTRACT(YEAR FROM Timestamp) = EXTRACT(YEAR FROM ${timestamp_raw})
             AND EXTRACT(QUARTER FROM Timestamp) = EXTRACT(QUARTER FROM ${timestamp_raw})
         ) ;;
