@@ -1,11 +1,118 @@
 view: fxa {
   derived_table: {
     sql:
+      WITH fxa_averages AS (
+        SELECT
+          r.Repository AS repository,
+          r.Workflow AS workflow,
+          r.`Test Suite` AS test_suite,
+          r.Timestamp AS timestamp,
+
+        (SELECT AVG(sub_r.`Execution Time`)
+         FROM `test_metrics.fxa_suite_results` sub_r
+         WHERE sub_r.Repository = r.Repository
+             AND sub_r.Workflow = r.Workflow
+             AND sub_r.`Test Suite` = r.`Test Suite`
+             AND sub_r.Timestamp BETWEEN TIMESTAMP_SUB(r.Timestamp, INTERVAL 30 DAY) AND r.Timestamp)
+        AS execution_time_30,
+
+        (SELECT AVG(sub_r.`Execution Time`)
+         FROM `test_metrics.fxa_suite_results` sub_r
+         WHERE sub_r.Repository = r.Repository
+             AND sub_r.Workflow = r.Workflow
+             AND sub_r.`Test Suite` = r.`Test Suite`
+             AND sub_r.Timestamp BETWEEN TIMESTAMP_SUB(r.Timestamp, INTERVAL 60 DAY) AND r.Timestamp)
+        AS execution_time_60,
+
+        (SELECT AVG(sub_r.`Execution Time`)
+         FROM `test_metrics.fxa_suite_results` sub_r
+         WHERE sub_r.Repository = r.Repository
+             AND sub_r.Workflow = r.Workflow
+             AND sub_r.`Test Suite` = r.`Test Suite`
+             AND sub_r.Timestamp BETWEEN TIMESTAMP_SUB(r.Timestamp, INTERVAL 90 DAY) AND r.Timestamp)
+        AS execution_time_90,
+
+        (SELECT AVG(sub_r.`Run Time`)
+         FROM `test_metrics.fxa_suite_results` sub_r
+         WHERE sub_r.Repository = r.Repository
+             AND sub_r.Workflow = r.Workflow
+             AND sub_r.`Test Suite` = r.`Test Suite`
+             AND sub_r.Timestamp BETWEEN TIMESTAMP_SUB(r.Timestamp, INTERVAL 30 DAY) AND r.Timestamp)
+        AS run_time_30,
+
+        (SELECT AVG(sub_r.`Run Time`)
+         FROM `test_metrics.fxa_suite_results` sub_r
+         WHERE sub_r.Repository = r.Repository
+             AND sub_r.Workflow = r.Workflow
+             AND sub_r.`Test Suite` = r.`Test Suite`
+             AND sub_r.Timestamp BETWEEN TIMESTAMP_SUB(r.Timestamp, INTERVAL 60 DAY) AND r.Timestamp)
+        AS run_time_60,
+
+        (SELECT AVG(sub_r.`Run Time`)
+         FROM `test_metrics.fxa_suite_results` sub_r
+         WHERE sub_r.Repository = r.Repository
+             AND sub_r.Workflow = r.Workflow
+             AND sub_r.`Test Suite` = r.`Test Suite`
+             AND sub_r.Timestamp BETWEEN TIMESTAMP_SUB(r.Timestamp, INTERVAL 90 DAY) AND r.Timestamp)
+        AS run_time_90,
+
+        (SELECT SAFE_MULTIPLY(SAFE_DIVIDE(COUNTIF(sub_r.Status = 'success'), COUNT(*)), 100)
+         FROM `test_metrics.fxa_suite_results` sub_r
+         WHERE sub_r.Repository = r.Repository
+             AND sub_r.Workflow = r.Workflow
+             AND sub_r.`Test Suite` = r.`Test Suite`
+             AND sub_r.Timestamp BETWEEN TIMESTAMP_SUB(r.Timestamp, INTERVAL 30 DAY) AND r.Timestamp)
+        AS success_rate_30,
+
+        (SELECT SAFE_MULTIPLY(SAFE_DIVIDE(COUNTIF(sub_r.Status = 'success'), COUNT(*)), 100)
+         FROM `test_metrics.fxa_suite_results` sub_r
+         WHERE sub_r.Repository = r.Repository
+             AND sub_r.Workflow = r.Workflow
+             AND sub_r.`Test Suite` = r.`Test Suite`
+             AND sub_r.Timestamp BETWEEN TIMESTAMP_SUB(r.Timestamp, INTERVAL 60 DAY) AND r.Timestamp)
+        AS success_rate_60,
+
+        (SELECT SAFE_MULTIPLY(SAFE_DIVIDE(COUNTIF(sub_r.Status = 'success'), COUNT(*)), 100)
+         FROM `test_metrics.fxa_suite_results` sub_r
+         WHERE sub_r.Repository = r.Repository
+             AND sub_r.Workflow = r.Workflow
+             AND sub_r.`Test Suite` = r.`Test Suite`
+             AND sub_r.Timestamp BETWEEN TIMESTAMP_SUB(r.Timestamp, INTERVAL 90 DAY) AND r.Timestamp)
+        AS success_rate_90,
+
+        (SELECT COUNT(*)
+         FROM `test_metrics.fxa_suite_results` sub_r
+         WHERE sub_r.Repository = r.Repository
+             AND sub_r.Workflow = r.Workflow
+             AND sub_r.`Test Suite` = r.`Test Suite`
+             AND sub_r.Timestamp BETWEEN TIMESTAMP_SUB(r.Timestamp, INTERVAL 30 DAY) AND r.Timestamp)
+        AS suite_count_30,
+
+        (SELECT COUNT(*)
+         FROM `test_metrics.fxa_suite_results` sub_r
+         WHERE sub_r.Repository = r.Repository
+             AND sub_r.Workflow = r.Workflow
+             AND sub_r.`Test Suite` = r.`Test Suite`
+             AND sub_r.Timestamp BETWEEN TIMESTAMP_SUB(r.Timestamp, INTERVAL 60 DAY) AND r.Timestamp)
+        AS suite_count_60,
+
+        (SELECT COUNT(*)
+         FROM `test_metrics.fxa_suite_results` sub_r
+         WHERE sub_r.Repository = r.Repository
+             AND sub_r.Workflow = r.Workflow
+             AND sub_r.`Test Suite` = r.`Test Suite`
+             AND sub_r.Timestamp BETWEEN TIMESTAMP_SUB(r.Timestamp, INTERVAL 90 DAY) AND r.Timestamp)
+        AS suite_count_90
+
+      FROM `test_metrics.fxa_suite_results` r
+      GROUP BY r.Repository, r.Workflow, r.`Test Suite`, r.Timestamp
+      )
+
       SELECT
         r.Repository AS repository,
         r.Workflow AS workflow,
         r.`Test Suite` AS test_suite,
-        COALESCE(a.`End Date 30`, DATE(r.Timestamp)) AS end_date_30,
+        DATE(r.Timestamp) AS date,
         r.Timestamp AS results_timestamp,
         r.`Job Number` AS results_job_number,
         r.Status AS results_status,
@@ -23,75 +130,25 @@ view: fxa {
         r.`Skipped Rate` AS results_skipped_rate,
         r.`Fixme Rate` AS results_fixme_rate,
 
-        a.`Execution Time 30` AS averages_execution_time_30,
-        a.`Execution Time 60` AS averages_execution_time_60,
-        a.`Execution Time 90` AS averages_execution_time_90,
-        a.`Run Time 30` AS averages_run_time_30,
-        a.`Run Time 60` AS averages_run_time_60,
-        a.`Run Time 90` AS averages_run_time_90,
-        a.`Success Rate 30` AS averages_success_rate_30,
-        a.`Success Rate 60` AS averages_success_rate_60,
-        a.`Success Rate 90` AS averages_success_rate_90,
-        a.`Suite Count 30` AS averages_suite_count_30,
-        a.`Suite Count 60` AS averages_suite_count_60,
-        a.`Suite Count 90` AS averages_suite_count_90,
-
+        a.execution_time_30 AS averages_execution_time_30,
+        a.execution_time_60 AS averages_execution_time_60,
+        a.execution_time_90 AS averages_execution_time_90,
+        a.run_time_30 AS averages_run_time_30,
+        a.run_time_60 AS averages_run_time_60,
+        a.run_time_90 AS averages_run_time_90,
+        a.success_rate_30 AS averages_success_rate_30,
+        a.success_rate_60 AS averages_success_rate_60,
+        a.success_rate_90 AS averages_success_rate_90,
+        a.suite_count_30 AS averages_suite_count_30,
+        a.suite_count_60 AS averages_suite_count_60,
+        a.suite_count_90 AS averages_suite_count_90,
 
       FROM `test_metrics.fxa_suite_results` r
-      LEFT JOIN `test_metrics.fxa_averages` a
-      ON r.Repository = a.Repository
-      AND r.Workflow = a.Workflow
-      AND r.`Test Suite` = a.`Test Suite`
-      AND DATE(r.Timestamp) = a.`End Date 30`
-
-      UNION ALL
-
-      SELECT
-        a.Repository AS repository,
-        a.Workflow AS workflow,
-        a.`Test Suite` AS test_suite,
-        CAST(a.`End Date 30` AS DATE) AS end_date_30,
-        r.Timestamp AS results_timestamp,
-        r.`Job Number` AS results_job_number,
-        r.Status AS results_status,
-
-        r.`Execution Time` AS results_execution_time,
-        r.`Run Time` AS results_run_time,
-        r.Success AS results_success,
-        r.Failure AS results_failure,
-        r.Skipped AS results_skipped,
-        r.Fixme AS results_fixme,
-        r.`Retry Count` AS results_retry_count,
-        r.Total AS results_total,
-        r.`Success Rate` AS results_success_rate,
-        r.`Failure Rate` AS results_failure_rate,
-        r.`Skipped Rate` AS results_skipped_rate,
-        r.`Fixme Rate` AS results_fixme_rate,
-
-        a.`Execution Time 30` AS averages_execution_time_30,
-        a.`Execution Time 60` AS averages_execution_time_60,
-        a.`Execution Time 90` AS averages_execution_time_90,
-        a.`Run Time 30` AS averages_run_time_30,
-        a.`Run Time 60` AS averages_run_time_60,
-        a.`Run Time 90` AS averages_run_time_90,
-        a.`Success Rate 30` AS averages_success_rate_30,
-        a.`Success Rate 60` AS averages_success_rate_60,
-        a.`Success Rate 90` AS averages_success_rate_90,
-        a.`Suite Count 30` AS averages_suite_count_30,
-        a.`Suite Count 60` AS averages_suite_count_60,
-        a.`Suite Count 90` AS averages_suite_count_90,
-
-      FROM `test_metrics.fxa_averages` a
-      LEFT JOIN `test_metrics.fxa_suite_results` r
-      ON a.Repository = r.Repository
-      AND a.Workflow = r.Workflow
-      AND a.`Test Suite` = r.`Test Suite`
-      AND a.`End Date 30` = DATE(r.Timestamp)
-      WHERE r.Repository IS NULL
-      AND r.Workflow IS NULL
-      AND r.`Test Suite` IS NULL
-      AND r.Timestamp IS NULL
-      AND r.`Job Number` IS NULL ;;
+      LEFT JOIN fxa_averages a
+        ON r.Repository = a.repository
+          AND r.Workflow = a.workflow
+          AND r.`Test Suite` = a.test_suite
+          AND r.Timestamp = a.timestamp ;;
   }
 
   # Dimensions
@@ -129,7 +186,7 @@ view: fxa {
   dimension_group: date {
     type: time
     timeframes: [raw, date, week, month, quarter, year]
-    sql: ${TABLE}.end_date_30 ;;
+    sql: ${TABLE}.date ;;
   }
 
   dimension_group: timestamp {
