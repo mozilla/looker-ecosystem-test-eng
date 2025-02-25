@@ -11,97 +11,97 @@ view: fxa {
         (SELECT AVG(sub_r.`Execution Time`)
          FROM `test_metrics.fxa_suite_results` sub_r
          WHERE sub_r.Repository = r.Repository
-             AND sub_r.Workflow = r.Workflow
-             AND sub_r.`Test Suite` = r.`Test Suite`
-             AND sub_r.Timestamp BETWEEN TIMESTAMP_SUB(r.Timestamp, INTERVAL 30 DAY) AND r.Timestamp)
+            AND sub_r.Workflow = r.Workflow
+            AND sub_r.`Test Suite` = r.`Test Suite`
+            AND sub_r.Timestamp BETWEEN TIMESTAMP_SUB(r.Timestamp, INTERVAL 30 DAY) AND r.Timestamp)
         AS execution_time_30,
 
         (SELECT AVG(sub_r.`Execution Time`)
          FROM `test_metrics.fxa_suite_results` sub_r
          WHERE sub_r.Repository = r.Repository
-             AND sub_r.Workflow = r.Workflow
-             AND sub_r.`Test Suite` = r.`Test Suite`
-             AND sub_r.Timestamp BETWEEN TIMESTAMP_SUB(r.Timestamp, INTERVAL 60 DAY) AND r.Timestamp)
+            AND sub_r.Workflow = r.Workflow
+            AND sub_r.`Test Suite` = r.`Test Suite`
+            AND sub_r.Timestamp BETWEEN TIMESTAMP_SUB(r.Timestamp, INTERVAL 60 DAY) AND r.Timestamp)
         AS execution_time_60,
 
         (SELECT AVG(sub_r.`Execution Time`)
          FROM `test_metrics.fxa_suite_results` sub_r
          WHERE sub_r.Repository = r.Repository
-             AND sub_r.Workflow = r.Workflow
-             AND sub_r.`Test Suite` = r.`Test Suite`
-             AND sub_r.Timestamp BETWEEN TIMESTAMP_SUB(r.Timestamp, INTERVAL 90 DAY) AND r.Timestamp)
+            AND sub_r.Workflow = r.Workflow
+            AND sub_r.`Test Suite` = r.`Test Suite`
+            AND sub_r.Timestamp BETWEEN TIMESTAMP_SUB(r.Timestamp, INTERVAL 90 DAY) AND r.Timestamp)
         AS execution_time_90,
 
         (SELECT AVG(sub_r.`Run Time`)
          FROM `test_metrics.fxa_suite_results` sub_r
          WHERE sub_r.Repository = r.Repository
-             AND sub_r.Workflow = r.Workflow
-             AND sub_r.`Test Suite` = r.`Test Suite`
-             AND sub_r.Timestamp BETWEEN TIMESTAMP_SUB(r.Timestamp, INTERVAL 30 DAY) AND r.Timestamp)
+            AND sub_r.Workflow = r.Workflow
+            AND sub_r.`Test Suite` = r.`Test Suite`
+            AND sub_r.Timestamp BETWEEN TIMESTAMP_SUB(r.Timestamp, INTERVAL 30 DAY) AND r.Timestamp)
         AS run_time_30,
 
         (SELECT AVG(sub_r.`Run Time`)
          FROM `test_metrics.fxa_suite_results` sub_r
          WHERE sub_r.Repository = r.Repository
-             AND sub_r.Workflow = r.Workflow
-             AND sub_r.`Test Suite` = r.`Test Suite`
-             AND sub_r.Timestamp BETWEEN TIMESTAMP_SUB(r.Timestamp, INTERVAL 60 DAY) AND r.Timestamp)
+            AND sub_r.Workflow = r.Workflow
+            AND sub_r.`Test Suite` = r.`Test Suite`
+            AND sub_r.Timestamp BETWEEN TIMESTAMP_SUB(r.Timestamp, INTERVAL 60 DAY) AND r.Timestamp)
         AS run_time_60,
 
         (SELECT AVG(sub_r.`Run Time`)
          FROM `test_metrics.fxa_suite_results` sub_r
          WHERE sub_r.Repository = r.Repository
-             AND sub_r.Workflow = r.Workflow
-             AND sub_r.`Test Suite` = r.`Test Suite`
-             AND sub_r.Timestamp BETWEEN TIMESTAMP_SUB(r.Timestamp, INTERVAL 90 DAY) AND r.Timestamp)
+            AND sub_r.Workflow = r.Workflow
+            AND sub_r.`Test Suite` = r.`Test Suite`
+            AND sub_r.Timestamp BETWEEN TIMESTAMP_SUB(r.Timestamp, INTERVAL 90 DAY) AND r.Timestamp)
         AS run_time_90,
 
         (SELECT SAFE_MULTIPLY(SAFE_DIVIDE(COUNTIF(sub_r.Status = 'success'), COUNT(*)), 100)
          FROM `test_metrics.fxa_suite_results` sub_r
          WHERE sub_r.Repository = r.Repository
-             AND sub_r.Workflow = r.Workflow
-             AND sub_r.`Test Suite` = r.`Test Suite`
-             AND sub_r.Timestamp BETWEEN TIMESTAMP_SUB(r.Timestamp, INTERVAL 30 DAY) AND r.Timestamp)
+            AND sub_r.Workflow = r.Workflow
+            AND sub_r.`Test Suite` = r.`Test Suite`
+            AND sub_r.Timestamp BETWEEN TIMESTAMP_SUB(r.Timestamp, INTERVAL 30 DAY) AND r.Timestamp)
         AS success_rate_30,
 
         (SELECT SAFE_MULTIPLY(SAFE_DIVIDE(COUNTIF(sub_r.Status = 'success'), COUNT(*)), 100)
          FROM `test_metrics.fxa_suite_results` sub_r
          WHERE sub_r.Repository = r.Repository
-             AND sub_r.Workflow = r.Workflow
-             AND sub_r.`Test Suite` = r.`Test Suite`
-             AND sub_r.Timestamp BETWEEN TIMESTAMP_SUB(r.Timestamp, INTERVAL 60 DAY) AND r.Timestamp)
+            AND sub_r.Workflow = r.Workflow
+            AND sub_r.`Test Suite` = r.`Test Suite`
+            AND sub_r.Timestamp BETWEEN TIMESTAMP_SUB(r.Timestamp, INTERVAL 60 DAY) AND r.Timestamp)
         AS success_rate_60,
 
         (SELECT SAFE_MULTIPLY(SAFE_DIVIDE(COUNTIF(sub_r.Status = 'success'), COUNT(*)), 100)
          FROM `test_metrics.fxa_suite_results` sub_r
          WHERE sub_r.Repository = r.Repository
-             AND sub_r.Workflow = r.Workflow
-             AND sub_r.`Test Suite` = r.`Test Suite`
-             AND sub_r.Timestamp BETWEEN TIMESTAMP_SUB(r.Timestamp, INTERVAL 90 DAY) AND r.Timestamp)
+            AND sub_r.Workflow = r.Workflow
+            AND sub_r.`Test Suite` = r.`Test Suite`
+            AND sub_r.Timestamp BETWEEN TIMESTAMP_SUB(r.Timestamp, INTERVAL 90 DAY) AND r.Timestamp)
         AS success_rate_90,
 
         (SELECT COUNT(*)
          FROM `test_metrics.fxa_suite_results` sub_r
          WHERE sub_r.Repository = r.Repository
-             AND sub_r.Workflow = r.Workflow
-             AND sub_r.`Test Suite` = r.`Test Suite`
-             AND sub_r.Timestamp BETWEEN TIMESTAMP_SUB(r.Timestamp, INTERVAL 30 DAY) AND r.Timestamp)
+            AND sub_r.Workflow = r.Workflow
+            AND sub_r.`Test Suite` = r.`Test Suite`
+            AND sub_r.Timestamp BETWEEN TIMESTAMP_SUB(r.Timestamp, INTERVAL 30 DAY) AND r.Timestamp)
         AS suite_count_30,
 
         (SELECT COUNT(*)
          FROM `test_metrics.fxa_suite_results` sub_r
          WHERE sub_r.Repository = r.Repository
-             AND sub_r.Workflow = r.Workflow
-             AND sub_r.`Test Suite` = r.`Test Suite`
-             AND sub_r.Timestamp BETWEEN TIMESTAMP_SUB(r.Timestamp, INTERVAL 60 DAY) AND r.Timestamp)
+            AND sub_r.Workflow = r.Workflow
+            AND sub_r.`Test Suite` = r.`Test Suite`
+            AND sub_r.Timestamp BETWEEN TIMESTAMP_SUB(r.Timestamp, INTERVAL 60 DAY) AND r.Timestamp)
         AS suite_count_60,
 
         (SELECT COUNT(*)
          FROM `test_metrics.fxa_suite_results` sub_r
          WHERE sub_r.Repository = r.Repository
-             AND sub_r.Workflow = r.Workflow
-             AND sub_r.`Test Suite` = r.`Test Suite`
-             AND sub_r.Timestamp BETWEEN TIMESTAMP_SUB(r.Timestamp, INTERVAL 90 DAY) AND r.Timestamp)
+            AND sub_r.Workflow = r.Workflow
+            AND sub_r.`Test Suite` = r.`Test Suite`
+            AND sub_r.Timestamp BETWEEN TIMESTAMP_SUB(r.Timestamp, INTERVAL 90 DAY) AND r.Timestamp)
         AS suite_count_90
 
       FROM `test_metrics.fxa_suite_results` r
@@ -112,11 +112,9 @@ view: fxa {
         r.Repository AS repository,
         r.Workflow AS workflow,
         r.`Test Suite` AS test_suite,
-        DATE(r.Timestamp) AS date,
         r.Timestamp AS results_timestamp,
         r.`Job Number` AS results_job_number,
         r.Status AS results_status,
-
         r.`Execution Time` AS results_execution_time,
         r.`Run Time` AS results_run_time,
         r.Success AS results_success,
@@ -182,12 +180,6 @@ view: fxa {
   # Dates and Timestamps
   # Dates and timestamps can be represented in Looker using a dimension group of type: time.
   # Looker converts dates and timestamps to the specified timeframes within the dimension group.
-
-  dimension_group: date {
-    type: time
-    timeframes: [raw, date, week, month, quarter, year]
-    sql: ${TABLE}.date ;;
-  }
 
   dimension_group: timestamp {
     type: time
