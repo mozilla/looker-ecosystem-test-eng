@@ -113,6 +113,7 @@ view: autopushrs {
         r.Workflow AS workflow,
         r.`Test Suite` AS test_suite,
         r.Timestamp AS results_timestamp,
+        DATE(r.Timestamp) AS date,
         r.`Job Number` AS results_job_number,
         r.Status AS results_status,
         r.`Execution Time` AS results_execution_time,
@@ -196,6 +197,12 @@ view: autopushrs {
   # Dates and Timestamps
   # Dates and timestamps can be represented in Looker using a dimension group of type: time.
   # Looker converts dates and timestamps to the specified timeframes within the dimension group.
+
+  dimension_group: date {
+    type: time
+    timeframes: [raw, date, week, month, quarter, year]
+    sql: ${TABLE}.date ;;
+  }
 
   dimension_group: timestamp {
     type: time
