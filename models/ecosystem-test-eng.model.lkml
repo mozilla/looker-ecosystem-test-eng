@@ -24,6 +24,10 @@ explore: merinopy_test_metrics {
   view_name: merinopy
 }
 
+explore: syncstoragers_test_metrics {
+  view_name: syncstoragers
+}
+
 explore: report_test_case_coverage {}
 
 explore: test_automation_coverage {}
