@@ -37,7 +37,3 @@ explore: test_automation_status {}
 explore: testrail_projects {}
 
 explore: report_test_case_coverage_by_project {}
-
-explore: experimenter_coverage {}
-
-explore: experimenter_suite_results {}
