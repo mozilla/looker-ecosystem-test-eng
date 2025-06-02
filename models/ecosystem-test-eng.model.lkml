@@ -44,7 +44,3 @@ explore: report_test_case_coverage_by_project {}
 explore: experimenter_coverage {}
 
 explore: experimenter_suite_results {}
-
-explore: experimenter_results {}
-
-explore: experimenter_averages {}
