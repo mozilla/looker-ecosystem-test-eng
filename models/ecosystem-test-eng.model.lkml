@@ -46,3 +46,5 @@ explore: experimenter_coverage {}
 explore: experimenter_suite_results {}
 
 explore: experimenter_results {}
+
+explore: experimenter_averages {}
