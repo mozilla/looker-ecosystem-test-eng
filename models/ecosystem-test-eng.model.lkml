@@ -4,9 +4,6 @@ connection: "ecosystem-test-eng"
 # include all the views
 include: "/views/**/*.view.lkml"
 
-# include all the dashboards
-include: "/dashboards/**/*.dashboard.lookml"
-
 # Datagroups define a caching policy for an Explore. To learn more,
 # use the Quick Help panel on the right to see documentation.
 
@@ -15,21 +12,21 @@ include: "/dashboards/**/*.dashboard.lookml"
 # fields available to users for data analysis.
 # Explores should be purpose-built for specific use cases.
 
-explore: autopushrs_averages {}
+explore: autopushrs_test_metrics {
+  view_name: autopushrs
+}
 
-explore: autopushrs_coverage {}
+explore: fxa_test_metrics {
+  view_name: fxa
+}
 
-explore: fxa_averages {}
+explore: merinopy_test_metrics {
+  view_name: merinopy
+}
 
-explore: fxa_results {}
-
-explore: merinopy_results {}
-
-explore: merinopy_averages {}
-
-explore: merinopy_coverage {}
-
-explore: autopushrs_results {}
+explore: syncstoragers_test_metrics {
+  view_name: syncstoragers
+}
 
 explore: report_test_case_coverage {}
 
@@ -44,5 +41,3 @@ explore: report_test_case_coverage_by_project {}
 explore: experimenter_coverage {}
 
 explore: experimenter_suite_results {}
-
-explore: experimenter_results {}
