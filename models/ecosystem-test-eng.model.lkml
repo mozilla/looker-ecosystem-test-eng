@@ -28,6 +28,10 @@ explore: syncstoragers_test_metrics {
   view_name: syncstoragers
 }
 
+explore: experimenter_test_metrics {
+  view_name: experimenter
+}
+
 explore: report_test_case_coverage {}
 
 explore: test_automation_coverage {}
@@ -37,7 +41,3 @@ explore: test_automation_status {}
 explore: testrail_projects {}
 
 explore: report_test_case_coverage_by_project {}
-
-explore: experimenter_coverage {}
-
-explore: experimenter_suite_results {}
