@@ -102,7 +102,23 @@ view: fxa {
             AND sub_r.Workflow = r.Workflow
             AND sub_r.`Test Suite` = r.`Test Suite`
             AND sub_r.Timestamp BETWEEN TIMESTAMP_SUB(r.Timestamp, INTERVAL 90 DAY) AND r.Timestamp)
-        AS suite_count_90
+        AS suite_count_90,
+
+        (SELECT AVG(SAFE_DIVIDE(sub_r.Total, sub_r.`Execution Time`))
+          FROM `test_metrics.fxa_suite_results` sub_r
+          WHERE sub_r.Repository = r.Repository
+            AND sub_r.Workflow = r.Workflow
+            AND sub_r.`Test Suite` = r.`Test Suite`
+            AND sub_r.Timestamp BETWEEN TIMESTAMP_SUB(r.Timestamp, INTERVAL 90 DAY) AND r.Timestamp)
+        AS tests_per_second_90_rolling,
+
+        (SELECT AVG(SAFE_DIVIDE(sub_r.Total, sub_r.`Execution Time`) * 60)
+         FROM `test_metrics.fxa_suite_results` sub_r
+         WHERE sub_r.Repository = r.Repository
+           AND sub_r.Workflow = r.Workflow
+           AND sub_r.`Test Suite` = r.`Test Suite`
+           AND sub_r.Timestamp BETWEEN TIMESTAMP_SUB(r.Timestamp, INTERVAL 90 DAY) AND r.Timestamp)
+        AS tests_per_minute_90_rolling,
 
       FROM `test_metrics.fxa_suite_results` r
       GROUP BY r.Repository, r.Workflow, r.`Test Suite`, r.Timestamp
@@ -140,6 +156,8 @@ view: fxa {
         a.suite_count_30 AS averages_suite_count_30,
         a.suite_count_60 AS averages_suite_count_60,
         a.suite_count_90 AS averages_suite_count_90,
+        a.tests_per_second_90_rolling AS averages_tests_per_second_90_rolling,
+        a.tests_per_minute_90_rolling AS averages_tests_per_minute_90_rolling,
 
       FROM `test_metrics.fxa_suite_results` r
       LEFT JOIN fxa_averages a
@@ -321,5 +339,37 @@ view: fxa {
   measure: total {
     type: sum
     sql: ${TABLE}.results_total ;;
+  }
+
+  measure: tests_per_second {
+    type: number
+    value_format_name: "decimal_2"
+    sql: SAFE_DIVIDE(${total}, ${execution_time}) ;;
+    label: "Tests per second"
+    description: "Number of tests executed per second"
+  }
+
+  measure: tests_per_minute {
+    type: number
+    value_format_name: "decimal_2"
+    sql: SAFE_DIVIDE(SAFE_DIVIDE(${total}, ${execution_time}), 60) ;;
+    label: "Tests per minute"
+    description: "Number of tests executed per minute"
+  }
+
+  measure: tests_per_second_rolling_90_avg {
+    type:  average
+    value_format_name: "decimal_2"
+    sql: ${TABLE}.averages_tests_per_second_90_rolling ;;
+    label: "Tests per second (90-day-rolling avg)"
+    description: "Average number of tests executed per second, over the past 90 days"
+  }
+
+  measure: tests_per_minute_rolling_90_avg {
+    type:  average
+    value_format_name: "decimal_2"
+    sql: ${TABLE}.averages_tests_per_minute_90_rolling ;;
+    label: "Tests per minute (90-day-rolling avg)"
+    description: "Average number of tests executed per minute, over the past 90 days"
   }
 }
