@@ -112,7 +112,7 @@ view: fxa {
             AND sub_r.Timestamp BETWEEN TIMESTAMP_SUB(r.Timestamp, INTERVAL 90 DAY) AND r.Timestamp)
         AS tests_per_second_90_rolling,
 
-        (SELECT AVG(SAFE_DIVIDE(sub_r.Total, sub_r.`Execution Time`) * 60)
+        (SELECT AVG(SAFE_DIVIDE(SAFE_DIVIDE(sub_r.Total, sub_r.`Execution Time`), 60))
          FROM `test_metrics.fxa_suite_results` sub_r
          WHERE sub_r.Repository = r.Repository
            AND sub_r.Workflow = r.Workflow
